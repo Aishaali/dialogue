@@ -1,0 +1,48 @@
+<head>
+  <title>dialogue</title>
+</head>
+
+<body>
+  <div class="container">
+    <div class="row">
+      <div class="span12">
+        <h1>dialogue.</h1>
+          {{> startup}}
+      </div>
+    </div>
+  </div>
+</body>
+
+<template name="startup">
+  {{#if logged}}
+    {{> chat}}
+    {{> entry}}
+    {{> status}}
+  {{else}}
+    {{> login}}
+  {{/if}}
+</template>
+
+<template name="login">
+  <input id="username" placeholder="Enter your name">
+</template>
+
+<template name="chat">
+  <div id="chatbox">
+    {{#each messages}}
+      {{> message}}
+    {{/each}}
+  </div>
+</template>
+
+<template name="entry">
+  <input id="new-message" value="" />
+</template>
+
+<template name="status">
+  <p>Logged as <b>{{username}}</b>. <a href="#" id="logout">Log out?</a></p>
+</template>
+
+<template name="message">
+  <div>{{time}} <b>{{user}}</b>: {{message}}</div>
+</template>
