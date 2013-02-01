@@ -1,6 +1,12 @@
 Messages = new Meteor.Collection "messages"
 
 if Meteor.isClient
+  Meteor.autosubscribe ->
+    Messages.find().observe
+      # when a new message is added, scroll to the bottom
+      added: ->
+        $("#bottom")[0].scrollIntoView()
+
   Template.startup.logged = ->
     return Session.get "user"
 
@@ -11,21 +17,27 @@ if Meteor.isClient
         Session.set "user", username.val()
 
   Template.chat.messages = ->
-    return Messages.find {}, {sort: {time: -1}}
+    return Messages.find {}, {sort: {time: 1}}
 
   Template.entry.events
     "keyup #new-message": (event) ->
       if event.type is "keyup" and event.which is 13  # enter
         new_message = $("#new-message")
 
-        Messages.insert
-          user: Session.get "user"
-          message: new_message.val()
-          time: new Date()
+        if new_message.val() isnt ""
+          Messages.insert
+            user: Session.get "user"
+            message: new_message.val()
+            time: new Date()
 
-        # empty the form and refocus with jQuery
-        new_message.val ""
-        new_message.focus()
+          # this, together with a CSS padding-bottom hack
+          # on #chat-box, scrolls the last message into
+          # view.
+          $("#bottom")[0].scrollIntoView()
+
+          # empty the form and refocus with jQuery
+          new_message.val ""
+          new_message.focus()
 
   Template.status.username = ->
     return Session.get "user"
@@ -36,4 +48,4 @@ if Meteor.isClient
 
 if Meteor.isServer
   Meteor.startup ->
-    # lol
+    # ...

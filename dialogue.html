@@ -32,6 +32,7 @@
     {{#each messages}}
       {{> message}}
     {{/each}}
+    <div id="bottom"></div>
   </div>
 </template>
 
@@ -44,5 +45,5 @@
 </template>
 
 <template name="message">
-  <div>{{time}} <b>{{user}}</b>: {{message}}</div>
+  <div id="msg-{{_id}}">{{time}} <b>{{user}}</b>: {{message}}</div>
 </template>
